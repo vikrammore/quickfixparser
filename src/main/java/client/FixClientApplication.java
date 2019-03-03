@@ -1,8 +1,11 @@
 package client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import quickfix.*;
 
 public class FixClientApplication extends MessageCracker implements Application {
+
+
     public void onCreate(SessionID sessionID) {
 
     }
@@ -28,6 +31,7 @@ public class FixClientApplication extends MessageCracker implements Application 
     }
 
     public void fromApp(Message message, SessionID sessionID) throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType {
-
+        System.out.println("Client App");
+        System.out.println( message.toString() );
     }
 }

@@ -1,8 +1,13 @@
 package server;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import quickfix.*;
 
 public class FixServerApplication extends MessageCracker implements Application {
+
+    @Autowired
+    FixServerMessageReceiver messageReceiver;
+
     public void onCreate(SessionID sessionID) {
 
     }
@@ -28,6 +33,15 @@ public class FixServerApplication extends MessageCracker implements Application 
     }
 
     public void fromApp(Message message, SessionID sessionID) throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue, UnsupportedMessageType {
+        // crack will delegate to
+        // specific implementation of on message
+        // depending on specific fix version message
+        crack( message, sessionID );
+    }
 
+    // handler to support fix50 new order
+    public void onMessage(quickfix.fix50.NewOrderSingle message, SessionID sessionID)
+            throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
+        messageReceiver.process( message, sessionID );
     }
 }
